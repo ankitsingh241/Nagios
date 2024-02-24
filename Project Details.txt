@@ -1,0 +1,8 @@
+In this lab we will see how to install Nagios to monitor our servers.
+
+Step 1 : Create a instance and allow all traffics.
+
+Step 2 : Use these commands:
+                           1. apt install httpd php
+                           2. apt install gcc glibc glibc-common
+                           3. apt install gd gd-develapt-install 
