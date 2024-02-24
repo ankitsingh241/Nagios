@@ -1,8 +1,67 @@
 In this lab we will see how to install Nagios to monitor our servers.
 
-Step 1 : Create a instance and allow all traffics.
+Step 1 : Create a Amazon linux instance and allow all traffics.
 
 Step 2 : Use these commands:
-                           1. apt install httpd php
-                           2. apt install gcc glibc glibc-common
-                           3. apt install gd gd-develapt-install 
+                           1. yum install httpd php
+                           2. yum install gcc glibc glibc-common
+                           3. yum install gd gd-devel
+Step 3 : add user and group.
+                           1. adduser -m nagios
+                           2. passwd nagios
+                           3. groupadd nagioscmd
+                           4. usermod -a -G nagioscmd nagios
+                           5. usermod -a -G nagioscmd apache
+
+Step 4 : make a directory to download nagios.
+                           1. mkdir ~/downloads
+         cd into downloads and download nagios using command
+                           2. wget http://prdownloads.sourceforge.net/sourceforge/nagios/nagios-4.5.0.tar.gz
+                           3. wget http://nagios-plugins.org/download/nagios-plugins-2.4.8.tar.gz
+ 
+Step 5 : Unzip the file using command "tar zxvf nagios-4.5.0.tar.gz"
+         cd into nagios directory
+
+Step 6 : Configure the group using command "./configure --with-command-group=nagioscmd"
+         yum install openssl-devel (will use only if any error like cannot find ssl headers)
+
+Step 7 : After configuring we need to compile those file using command "make all"
+         make install
+         make install-init
+         make install-config
+         make install-commandmode
+
+         If you want to change the emailid and other details we can vim /usr/local/nagios/etc/objects/contacts.cfg
+
+         make install-webconf --> to configure web
+
+Step 8 : Set password for your nagios using command 
+         htpasswd -c /usr/local/nagios/etc/htpasswd.users nagiosadmin
+         service httpd restart
+
+Step 9 : Go to downloads again to extract nagios plugins
+         tar zxcf nagios-plugins-2.4.8.tar.gz
+         cd into plugins then configure those files using command
+         ./configure --with-nagios-user=nagios --with-nagios-group=nagios
+         make all
+         make install
+         chkconfig --add nagios
+         chkconfig nagios on
+         
+         to check if all the settings are good or not use :
+         /usr/local/nagios/bin/nagios -v /usr/local/nagios/etc/nagios.cfg
+         it will show 0 warnings and everything is working fine.
+
+Step 10 :service nagios start
+         service httpd restart
+
+         Now copy the public IP of your instance and paste it in your browser and add following
+         : http://13.126.109.179/nagios/
+
+         Input userid and password then you will see the home page of Ngaios where you can see all the service
+         like how many hosts has been montering by nagios their status and other services as well.
+
+
+
+
+
